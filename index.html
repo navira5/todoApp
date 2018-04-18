@@ -8,10 +8,32 @@
   	
   <body>
   	<h1>To Do</h1>
-  	<button id="displayButton">Display</button>
-  	<button id="toggleAllButton">Toggle All</button>
 
+    <div>
+    	<button onclick="handlers.displayToDo()">Display</button>
+    	<button onclick="handlers.toggleAll()">Toggle All</button>
+    </div>
 
+    <div>
+      <button onclick="handlers.addTodo()">Add</button>
+      <input id="addToDoTextInput" type="text">
+    </div>
+
+    <div>
+      <button onclick="handlers.changeToDo()">Change To Do</button>
+      <input id="changeToDoPositionInput" type="number">
+      <input id="changeTodoTextInput" type="text">
+    </div>
+
+    <div>
+      <button onclick="handlers.deleteTodo()">Delete</button>
+      <input id="deleteTodoPositionInput" type="number">
+    </div>
+
+    <div>
+      <button onclick="handlers.toggleCompleted()">Check Completed</button>
+      <input id="toggleCompletedPositionInput" type="number">
+    </div>
 
     <script src="main.js"></script>
   </body>
