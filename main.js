@@ -7,13 +7,17 @@ The purpose of this project is to practice javascript, github, terminal, and htm
 var todoList = {
 	todo: [],
 	displayToDo: function() {
-		if(!this.todo.length) {
+		if(this.todo.length === 0) {
 			console.log('Your to do list is empty');
 		} else {
 			console.log("To Do List: ");
-			this.todo.forEach(function(item) {
-				item.completed === true ? console.log('(x)', item.todoText) : console.log('( )', item.todoText);
-			});
+			for(var i = 0; i < this.todo.length; i++) {
+				if(this.todo[i].completed === true) {
+					console.log('(x)', this.todo[i].todoText);
+				} else {
+					console.log('( )', this.todo[i].todoText);
+				}
+			}
 		}
 	},
 	addTodo: function(todoText) {
@@ -37,35 +41,42 @@ var todoList = {
 		this.displayToDo();
 	},
 	toggleAll: function() {
-		var allTodo = this.todo.length;
+		var totalTodo = this.todo.length;
 		var completedTodo = 0;
 		
-		for(var i = 0; i < allTodo.length; i++) {
-			if(this.todo[i].completed) {
+		for(var i = 0; i < totalTodo; i++) {
+			if(this.todo[i].completed === true) {
 				completedTodo++;
 			}
 		}
 
-		if(completedTodo === allTodo) {
-			for(var i = 0; i < allTodo; i++) {
+		if(completedTodo === totalTodo) {
+			for(var i = 0; i < totalTodo; i++) {
 				this.todo[i].completed = false;
 			}
 		} else {
-			for(var i = 0; i < allTodo; i++) {
+			for(var i = 0; i < totalTodo; i++) {
 				this.todo[i].completed = true;
 			}
 		}
+		this.displayToDo();
 	}
-
 };
 
-todoList.addTodo('finish homework');
-todoList.addTodo('clean room');
 
-//get access to to display button
 var displayToDoButton = document.getElementById('displayButton');
+var toggleAllButton = document.getElementById('toggleAllButton');
 
-//run list of to do tasks after display button is clicked
 displayToDoButton.addEventListener('click', function() {
 	todoList.displayToDo();
 });
+
+toggleAllButton.addEventListener('click', function () {
+	todoList.toggleAll();
+});
+
+
+
+
+
+
