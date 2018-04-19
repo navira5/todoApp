@@ -1,6 +1,6 @@
 /*
 This project creates a To Do application that allows the user to create, change and delete to do items.
-This application follows steps from the Watch and Code tutorial with some modifications. 
+This application follows the Watch and Code tutorial. 
 The purpose of this project is to practice javascript, github, terminal, and html/css skills.
 */
 
@@ -70,11 +70,13 @@ var handlers = {
 	},
 	toggleAll: function() {
 		todoList.toggleAll();
+		view.displayToDo();
 	},
 	addTodo: function() {
 		var addToDoTextInput = document.getElementById('addToDoTextInput');
 		todoList.addTodo(addToDoTextInput.value);
 		addToDoTextInput.value = '';
+		view.displayToDo();
 	},
 	changeToDo: function() {
 		var changeToDoPositionInput = document.getElementById('changeToDoPositionInput');
@@ -82,16 +84,41 @@ var handlers = {
 		todoList.changeToDo(changeToDoPositionInput.valueAsNumber,changeTodoTextInput.value);
 		changeToDoPositionInput.value = '';
 		changeTodoTextInput.value = '';
+		view.displayToDo();
 	},
 	deleteTodo: function() {
 		var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
 		todoList.deleteToDo(deleteTodoPositionInput.valueAsNumber);
 		deleteTodoPositionInput.value = '';
+		view.displayToDo();
 	},
 	toggleCompleted: function() {
 		var toggleCompletedPositionInput = document.getElementById('toggleCompletedPositionInput');
 		todoList.toggleCompleted(toggleCompletedPositionInput.valueAsNumber);
 		toggleCompletedPositionInput.value = '';
+		view.displayToDo();
+	}
+};
+
+var view = {
+	displayToDo: function() {
+		var todoUl = document.querySelector('ul');
+		todoUl.innerHTML = '';
+
+		for(var i = 0; i < todoList.todo.length; i++) {
+			var todoLi = document.createElement('li');
+			var todo = todoList.todo[i];
+			var todoTextWithCompletion = '';
+
+			if(todo.completed === true) {
+				todoTextWithCompletion = '(x) ' + todo.todoText;
+			} else {
+				todoTextWithCompletion = '( ) ' + todo.todoText;
+			}
+
+			todoLi.textContent = todoTextWithCompletion;
+			todoUl.appendChild(todoLi);
+		}
 	}
 };
 
