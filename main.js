@@ -6,68 +6,44 @@ The purpose of this project is to practice javascript, github, terminal, and htm
 
 var todoList = {
 	todo: [],
-	displayToDo: function() {
-		if(this.todo.length === 0) {
-			console.log('Your to do list is empty');
-		} else {
-			console.log("To Do List: ");
-			for(var i = 0; i < this.todo.length; i++) {
-				if(this.todo[i].completed === true) {
-					console.log('(x)', this.todo[i].todoText);
-				} else {
-					console.log('( )', this.todo[i].todoText);
-				}
-			}
-		}
-	},
 	addTodo: function(todoText) {
 		this.todo.push({
 			todoText: todoText,
 			completed: false
 		});
-		this.displayToDo();
 	},
 	changeToDo: function(position, updateTo) {
 		todoList.todo[position]['todoText'] = updateTo;
-		this.displayToDo();
 	},
 	deleteToDo: function(position) {
 		this.todo.splice(position,1);
-		this.displayToDo();
 	},
 	toggleCompleted: function(position) {
 		var todo = this.todo[position];
 		todo.completed = !todo.completed;
-		this.displayToDo();
 	},
 	toggleAll: function() {
 		var totalTodo = this.todo.length;
 		var completedTodo = 0;
 		
-		for(var i = 0; i < totalTodo; i++) {
-			if(this.todo[i].completed === true) {
+		this.todo.forEach(function(todoItem) {
+			if(todoItem.completed === true) {
 				completedTodo++;
 			}
-		}
+		});
 
-		if(completedTodo === totalTodo) {
-			for(var i = 0; i < totalTodo; i++) {
-				this.todo[i].completed = false;
+		this.todo.forEach(function(todoItem) {
+			if(completedTodo === totalTodo) {
+				todoItem.completed = false;
+			} else {
+				todoItem.completed = true;
 			}
-		} else {
-			for(var i = 0; i < totalTodo; i++) {
-				this.todo[i].completed = true;
-			}
-		}
-		this.displayToDo();
+		});
 	}
 };
 
 
 var handlers = {
-	displayToDo: function() {
-		todoList.displayToDo();
-	},
 	toggleAll: function() {
 		todoList.toggleAll();
 		view.displayToDo();
@@ -86,10 +62,8 @@ var handlers = {
 		changeTodoTextInput.value = '';
 		view.displayToDo();
 	},
-	deleteTodo: function() {
-		var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
-		todoList.deleteToDo(deleteTodoPositionInput.valueAsNumber);
-		deleteTodoPositionInput.value = '';
+	deleteTodo: function(position) {
+		todoList.deleteToDo(position);
 		view.displayToDo();
 	},
 	toggleCompleted: function() {
@@ -105,9 +79,8 @@ var view = {
 		var todoUl = document.querySelector('ul');
 		todoUl.innerHTML = '';
 
-		for(var i = 0; i < todoList.todo.length; i++) {
+		todoList.todo.forEach(function(todo, position) {
 			var todoLi = document.createElement('li');
-			var todo = todoList.todo[i];
 			var todoTextWithCompletion = '';
 
 			if(todo.completed === true) {
@@ -116,11 +89,37 @@ var view = {
 				todoTextWithCompletion = '( ) ' + todo.todoText;
 			}
 
+			todoLi.id = position;
 			todoLi.textContent = todoTextWithCompletion;
+			todoLi.appendChild(this.createDeleteButton());
 			todoUl.appendChild(todoLi);
-		}
+
+		}, this);
+	},
+	createDeleteButton: function() {
+		var deleteButton = document.createElement('button');
+		deleteButton.textContent = 'Delete';
+		deleteButton.className = 'deleteButton';
+		return deleteButton;
+	},
+	setUpEventListeners: function() {
+		var todosUl = document.querySelector('ul');
+
+		todosUl.addEventListener('click', function(event) {
+			console.log(event.target.parentNode.id);
+			var elementClicked = event.target;
+
+			if(elementClicked.className === 'deleteButton') {
+				var idPostion = parseInt(elementClicked.parentNode.id);
+				handlers.deleteTodo(idPostion);
+			}
+		});
 	}
 };
+
+view.setUpEventListeners();
+
+
 
 
 
